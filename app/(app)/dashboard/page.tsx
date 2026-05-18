@@ -59,7 +59,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Top stats row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+      <div className="dashboard-stats-grid">
         {[
           { label: 'Followers', value: formatNumber(totalFollowers), icon: '👥', sub: 'Total' },
           { label: 'Posts This Week', value: thisWeekPosts.length, icon: '🎬', sub: 'Last 7 days' },
@@ -79,7 +79,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <div className="dashboard-main-grid">
         {/* Recent Posts */}
         <div className="pp-card animate-fade-up animate-delay-2" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -129,7 +129,7 @@ export default function DashboardPage() {
               <h2 style={{ fontSize: '16px' }}>Idea Pipeline</h2>
               <Link href="/ideas" style={{ fontSize: '12px', color: 'var(--tt-red)', textDecoration: 'none', fontWeight: 600 }}>View all →</Link>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+            <div className="dashboard-pipeline-grid">
               {[
                 { label: 'Ideas', count: ideas.filter(i => i.status === 'idea').length, color: '#7070a0' },
                 { label: 'In Progress', count: ideas.filter(i => ['planned','scripted','filmed','editing'].includes(i.status)).length, color: '#f59e0b' },
@@ -197,7 +197,7 @@ export default function DashboardPage() {
           <p style={{ color: 'var(--tt-muted)', fontSize: '14px', maxWidth: '400px', margin: '0 auto 24px' }}>
             Start by adding a content idea or logging a recent TikTok post to begin tracking what works.
           </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+          <div className="dashboard-welcome-actions">
             <Link href="/ideas/new" className="pp-btn-primary">💡 Add First Idea</Link>
             <Link href="/posts/new" className="pp-btn-secondary">🎬 Log a Post</Link>
           </div>
