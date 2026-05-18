@@ -77,7 +77,7 @@ export default function PostDetailPage() {
       <Link href="/posts" style={{ color: 'var(--tt-muted)', textDecoration: 'none', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px', marginBottom: '20px' }}>← Post Journal</Link>
 
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }} className="animate-fade-up">
+      <div className="post-detail-header animate-fade-up">
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
             <h1 style={{ fontSize: '24px' }}>{post.title}</h1>
@@ -97,7 +97,7 @@ export default function PostDetailPage() {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px' }}>
+      <div className="post-detail-grid">
         {/* Left column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Latest metrics */}
@@ -106,7 +106,7 @@ export default function PostDetailPage() {
               <div style={{ fontSize: '12px', color: 'var(--tt-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '16px' }}>
                 Latest Stats · {SNAPSHOT_NAMES[latest.snapshot_label as SnapshotLabel]}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '16px' }}>
+              <div className="post-metrics-grid">
                 {[
                   { label: 'Views', value: formatNumber(latest.views), color: '#25f4ee' },
                   { label: 'Likes', value: formatNumber(latest.likes), color: '#fe2c55' },
@@ -162,7 +162,7 @@ export default function PostDetailPage() {
                   <div style={{ fontSize: '12px', color: 'var(--tt-red)', fontWeight: 700, marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     {SNAPSHOT_NAMES[activeSnapshot]} Snapshot
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                  <div className="post-snapshot-grid">
                     {[
                       { k: 'views', placeholder: 'Views' },
                       { k: 'likes', placeholder: 'Likes' },
