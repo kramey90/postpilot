@@ -25,10 +25,16 @@ export async function createProfile(userId: string, displayName: string): Promis
   return data
 }
 
-export async function updateProfile(id: string, updates: Partial<CreatorProfile>): Promise<boolean> {
+export async function updateProfile(id: string, updates: Partial<CreatorProfile>): Promise<CreatorProfile | null> {
   const supabase = createClient()
-  const { error } = await supabase.from('creator_profiles').update(updates).eq('id', id)
-  return !error
+  const { data, error } = await supabase
+    .from('creator_profiles')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) { console.error('updateProfile error:', error); return null }
+  return data
 }
 
 // ─── CONTENT PILLARS ─────────────────────────────────────

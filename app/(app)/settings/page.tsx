@@ -9,7 +9,7 @@ import type { ContentPillar } from '@/lib/types'
 import { PILLAR_COLORS } from '@/lib/utils'
 
 export default function SettingsPage() {
-  const { profile, refreshProfile } = useAuth()
+  const { profile, patchProfile } = useAuth()
   const [pillars, setPillars] = useState<ContentPillar[]>([])
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -45,7 +45,7 @@ export default function SettingsPage() {
     e.preventDefault()
     if (!profile) return
     setSaving(true)
-    await updateProfile(profile.id, {
+    const updated = await updateProfile(profile.id, {
       display_name: form.display_name,
       niche: form.niche || undefined,
       bio: form.bio || undefined,
@@ -53,10 +53,12 @@ export default function SettingsPage() {
       current_follower_count: parseInt(form.current_follower_count) || 0,
       primary_goal: (form.primary_goal || undefined) as any,
     })
-    await refreshProfile()
     setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    if (updated) {
+      patchProfile(updated)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2500)
+    }
   }
 
   const handleAddPillar = async () => {

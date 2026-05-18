@@ -11,9 +11,10 @@ interface AuthCtx {
   loading: boolean
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
+  patchProfile: (updated: CreatorProfile) => void
 }
 
-const AuthContext = createContext<AuthCtx>({ user: null, profile: null, loading: true, signOut: async () => {}, refreshProfile: async () => {} })
+const AuthContext = createContext<AuthCtx>({ user: null, profile: null, loading: true, signOut: async () => {}, refreshProfile: async () => {}, patchProfile: () => {} })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -85,8 +86,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (user) await loadProfile(user)
   }
 
+  const patchProfile = (updated: CreatorProfile) => {
+    setProfile(updated)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile, patchProfile }}>
       {children}
     </AuthContext.Provider>
   )
