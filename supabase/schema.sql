@@ -13,7 +13,7 @@ create extension if not exists "uuid-ossp";
 -- ─────────────────────────────────────────
 create table creator_profiles (
   id uuid primary key default uuid_generate_v4(),
-  user_id uuid references auth.users(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null unique,
   display_name text not null,
   niche text,
   bio text,

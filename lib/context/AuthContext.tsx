@@ -24,27 +24,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = async (u: User) => {
     try {
       const supabase = createClient()
-      // Try to get existing profile
-      const { data: existing } = await supabase
+      const { data: existing, error: fetchError } = await supabase
         .from('creator_profiles')
         .select('*')
         .eq('user_id', u.id)
         .maybeSingle()
+
+      if (fetchError) {
+        console.error('Profile fetch error:', fetchError)
+        return
+      }
 
       if (existing) {
         setProfile(existing)
         return
       }
 
-      // Create profile if none exists
+      // Only reach here when the SELECT succeeded and genuinely returned 0 rows
       const displayName = u.user_metadata?.display_name || u.email?.split('@')[0] || 'Creator'
-      const { data: created } = await supabase
+      const { data: created, error: createError } = await supabase
         .from('creator_profiles')
         .insert({ user_id: u.id, display_name: displayName, current_follower_count: 0 })
         .select()
         .single()
 
-      setProfile(created)
+      if (createError) { console.error('Profile create error:', createError); return }
+      if (created) setProfile(created)
     } catch (e) {
       console.error('Profile load error:', e)
     }
@@ -62,7 +67,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // INITIAL_SESSION fires immediately on subscribe — getSession already handled it
+      if (event === 'INITIAL_SESSION') return
       setUser(session?.user ?? null)
       if (session?.user) {
         loadProfile(session.user).finally(() => setLoading(false))
